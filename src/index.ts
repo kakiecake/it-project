@@ -5,15 +5,23 @@ import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import multer from 'multer';
 import fs from 'fs'
+import knex from 'knex';
 
 import { ArticleStore } from "./article.store"
 import { ArticleService } from "./article.service"
 import { AuthService } from "./auth.service"
 import { UserStore } from "./user.store"
 
-const articleStore = new ArticleStore()
-const articleService = new ArticleService(articleStore)
-const userStore = new UserStore()
+const db = knex({
+    client: 'better-sqlite3',
+    connection: {
+        filename: './db.sqlite'
+    }
+});
+
+const articleStore = new ArticleStore(db);
+const articleService = new ArticleService(articleStore, { basePhotoUrl: '/uploads' })
+const userStore = new UserStore(db)
 const authService = new AuthService(userStore)
 
 const app = express()
@@ -116,8 +124,8 @@ app.post('/articles', upload.single('image'), async (req, res) => {
         res.status(422).end();
         return;
     };
-    const photoUrl = `/uploads/${req.file?.filename}`
-    const article = await articleService.createArticle(title, content, photoUrl)
+    const photoFilename = req.file.filename;
+    const article = await articleService.createArticle(title, content, photoFilename)
     res.header('HX-Redirect', `/articles/${article.id}`).end();
 })
 
@@ -138,6 +146,10 @@ app.post("/login", async (req, res) => {
         .status(200)
         .header("HX-Redirect", "/")
         .end()
+})
+
+app.get('/logout', (req, res) => {
+    return res.clearCookie('user').redirect('/login');
 })
 
 app.listen(3000, () => {

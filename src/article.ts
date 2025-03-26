@@ -3,4 +3,5 @@ export type Article = {
     title: string;
     photoUrl?: string;
     content: string;
+    createdAt: Date;
 }

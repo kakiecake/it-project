@@ -1,19 +1,18 @@
-type User = { id: number; email: string; password: string }
+import { Knex } from 'knex';
+
+type RawUser = { id: number; email: string; password: string }
+type User = Omit<RawUser, 'password'>
 
 export class UserStore {
-    private users: User[] = [{
-        id: 1,
-        email: 'oleg@gmail.com',
-        password: '1234567'
-    }]
-
-    constructor() { }
+    constructor(private readonly db: Knex) { }
 
     async getUserById(id: number): Promise<User | null> {
-        return this.users.find(u => u.id === id) || null;
+        const user = await this.db('users').select<User>('id', 'email').where({ id }).first()
+        return user || null;
     }
 
-    async getUserByLoginAndPassword(email: string, password: string): Promise<{ id: number; email: string; password: string } | null> {
-        return this.users.find(u => u.email === email && u.password === password) || null
+    async getUserByLoginAndPassword(email: string, password: string): Promise<User | null> {
+        const user = await this.db('users').select<User>('id', 'email').where({ email, password }).first()
+        return user || null;
     }
 }

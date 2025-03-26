@@ -1,44 +1,38 @@
 import { Article } from "./article"
-import { ArticleStore } from "./article.store"
+import { ArticleStore, RawArticle } from "./article.store"
 
 export class ArticleService {
-    private articles: Article[] = [
-        {
-            id: 1,
-            photoUrl: 'https://news.northwestern.edu/assets/Stories/2023/03/get-out970__FitMaxWzk3MCw2NTBd.jpg',
-            title: 'Putin wants sex!',
-            content: 'Vladimir Putin announced cum season',
-        },
-        {
-            id: 2,
-            title: 'Joe Biden died from ligma',
-            content: 'Unfortunate',
-        },
-        {
-            id: 3,
-            title: 'New cock type discovered',
-            content: 'Among us',
-        },
-    ]
+    constructor(
+        private readonly articleStore: ArticleStore,
+        private readonly options: { basePhotoUrl: string },
+    ) { }
 
-    constructor(private readonly articleStore: ArticleStore) { }
-
-    async listArticles(): Promise<Article[]> {
-        return this.articles
+    private transformRawArticle(rawArticle: RawArticle): Article {
+        return {
+            id: rawArticle.id,
+            content: rawArticle.content,
+            title: rawArticle.title,
+            photoUrl: `${this.options.basePhotoUrl}/${rawArticle.photoFilename}`,
+            createdAt: rawArticle.createdAt,
+        }
     }
 
-    async createArticle(title: string, content: string, photoUrl?: string): Promise<Article> {
-        const article = {
-            id: this.articles[this.articles.length - 1].id + 1,
-            title,
-            content,
-            photoUrl
-        }
-        this.articles.push(article)
-        return article
+    async listArticles(): Promise<Article[]> {
+        const rawArticles = await this.articleStore.getArticles()
+        return rawArticles.map((a) => this.transformRawArticle(a))
+    }
+
+    async createArticle(
+        title: string,
+        content: string,
+        photoFilename: string,
+    ): Promise<Article> {
+        const rawArticle = await this.articleStore.saveArticle(title, content, photoFilename)
+        return this.transformRawArticle(rawArticle)
     }
 
     async getArticleById(id: number): Promise<Article | null> {
-        return this.articles.find(a => a.id === id) || null
+        const rawArticle = await this.articleStore.getArticleById(id)
+        return rawArticle ? this.transformRawArticle(rawArticle) : null;
     }
 }
