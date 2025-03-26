@@ -4,18 +4,32 @@ import { Article } from "./article"
 export type RawArticle = Omit<Article, "photoUrl"> & { photoFilename: string }
 
 export class ArticleStore {
-    constructor(private readonly db: Knex) { }
+    constructor(private readonly db: Knex) {}
 
     async getArticleById(id: number): Promise<RawArticle | null> {
-        return (await this.db("articles")
-            .select("id", "title", "content", "photo_filename AS photoFilename", "created_at")
-            .where({ id })
-            .first()) || null;
+        return (
+            (await this.db("articles")
+                .select(
+                    "id",
+                    "title",
+                    "content",
+                    "photo_filename AS photoFilename",
+                    "created_at",
+                )
+                .where({ id })
+                .first()) || null
+        )
     }
 
     async getArticles(): Promise<RawArticle[]> {
         return await this.db("articles")
-            .select("id", "title", "content", "photo_filename AS photoFilename", "created_at")
+            .select(
+                "id",
+                "title",
+                "content",
+                "photo_filename AS photoFilename",
+                "created_at",
+            )
             .orderBy("created_at", "desc")
     }
 
@@ -35,5 +49,9 @@ export class ArticleStore {
             "id",
         )
         return { id, title, content, photoFilename, createdAt }
+    }
+
+    async deleteArticle(id: number): Promise<void> {
+        await this.db("articles").delete().where({ id })
     }
 }

@@ -1,11 +1,10 @@
 {{> navbar}}
 
-<main class="bg-gray-50 p-6 md:p-10">
+<main class="bg-gray-50 p-4 md:p-10">
     <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Последние новости</h1>
+        <h1 class="text-4xl md:text-3xl font-bold text-gray-800 mb-8 text-center">Последние новости</h1>
         
-        <!-- Grid Container -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {{#each articles}}
             <div class="group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="aspect-w-4 aspect-h-3 overflow-hidden">
@@ -13,12 +12,12 @@
                          alt="Nature image"
                          class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
                 </div>
-                <div class="p-4 border-t border-gray-100">
-                    <a href="/articles/{{ this.id }}" class="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+                <div class="p-5 md:p-4 border-t border-gray-100">
+                    <a href="/articles/{{ this.id }}" class="text-xl md:text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors">
                         {{ this.title }}
                         <span class="absolute inset-0" aria-hidden="true"></span>
                     </a>
-                    <p class="mt-1 text-sm text-gray-500">{{ this.title }}</p>
+                    <p class="mt-2 md:mt-1 text-base md:text-sm text-gray-500">Читать полностью...</p>
                 </div>
             </div>
             {{/each}}

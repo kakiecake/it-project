@@ -1,0 +1,100 @@
+{{> navbar}}
+
+<div class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Контакты</h1>
+            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+                Свяжитесь с нами
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Information -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-6 py-8 sm:p-10">
+                    <div class="flex items-start mb-8">
+                        <div class="flex-shrink-0 bg-blue-50 rounded-md p-3">
+                            <i class="fas fa-building text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Наш офис</h3>
+                            <p class="mt-1 text-gray-600">Россия, Санкт-Петербург, Лиговский пр., 74, <br>"Лофт Проект Этажи"</div>
+                    </div>
+
+                    <div class="flex items-start mb-8">
+                        <div class="flex-shrink-0 bg-blue-50 rounded-md p-3">
+                            <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Написать нам</h3>
+                            <p class="mt-1 text-gray-600">
+                                По всем вопросам: <a href="mailto:news@mycompany.com" class="text-blue-600 hover:text-blue-500">news@mycompany.com</a><br>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-50 rounded-md p-3">
+                            <i class="fas fa-newspaper text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Предложить новости</h3>
+                            <p class="mt-1 text-gray-600">
+                                Есть чем поделиться? Присылайте свои новости по адресу:<br>
+                                <a href="mailto:news@mycompany.com" class="text-blue-600 hover:text-blue-500">news@mycompany.com</a>
+                            </p>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Пожалуйста, укажите "Новости" в качестве заголовка. Ответ поступит в течение 2-3 рабочих дней.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Widget -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="h-full flex flex-col">
+                    <div class="px-6 py-5 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Найти нас</h3>
+                    </div>
+                    <div class="flex-grow p-1">
+                        <!-- Google Maps Embed -->
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256054567!2d-73.9878449241646!3d40.74844097138971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689874327653!5m2!1sen!2sus" 
+                            width="100%" 
+                            height="100%" 
+                            style="min-height: 400px; border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="rounded-b-lg">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-6 py-5 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Часы работы</h3>
+            </div>
+            <div class="px-6 py-8 sm:px-10">
+                <ul class="divide-y divide-gray-200">
+                    <li class="py-3 flex justify-between">
+                        <span class="text-gray-600">Понедельник - Пятница</span>
+                        <span class="font-medium text-gray-900">9:00 - 18:00</span>
+                    </li>
+                    <li class="py-3 flex justify-between">
+                        <span class="text-gray-600">Суббота</span>
+                        <span class="font-medium text-gray-900">10:00 - 16:00</span>
+                    </li>
+                    <li class="py-3 flex justify-between">
+                        <span class="text-gray-600">Воскресенье</span>
+                        <span class="font-medium text-gray-900">Закрыто</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

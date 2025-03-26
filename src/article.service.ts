@@ -31,6 +31,10 @@ export class ArticleService {
         return this.transformRawArticle(rawArticle)
     }
 
+    async deleteArticleById(id: number) {
+        await this.articleStore.deleteArticle(id);
+    }
+
     async getArticleById(id: number): Promise<Article | null> {
         const rawArticle = await this.articleStore.getArticleById(id)
         return rawArticle ? this.transformRawArticle(rawArticle) : null;
