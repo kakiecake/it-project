@@ -1,0 +1,185 @@
+{{> navbar}}
+
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-800">Create New Article</h2>
+      </div>
+      
+      <form 
+        hx-post="/articles"
+        hx-target="#form-response"
+        hx-swap="innerHTML"
+        hx-encoding="multipart/form-data"
+        class="px-6 py-4 space-y-6">
+        
+        <!-- Response message container -->
+        <div id="form-response"></div>
+        
+        <!-- Title Field -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+            Article Title
+          </label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+        </div>
+        
+        <!-- Photo Upload - Improved with preview -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Featured Image
+          </label>
+          <div 
+            id="drop-zone"
+            class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 transition-all hover:border-blue-400 hover:bg-blue-50">
+            <div class="space-y-1 text-center">
+              <!-- Image preview container (hidden by default) -->
+              <div id="image-preview-container" class="hidden mb-4">
+                <img id="image-preview" class="mx-auto max-h-48 rounded-md shadow-sm" src="#" alt="Preview" />
+                <button 
+                  type="button"
+                  id="remove-image-btn"
+                  class="mt-2 text-sm text-red-600 hover:text-red-800 focus:outline-none">
+                  Remove Image
+                </button>
+              </div>
+              
+              <!-- Default upload UI (shown when no image selected) -->
+              <div id="upload-ui">
+                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="flex justify-center text-sm text-gray-600">
+                  <label for="image" class="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                    <span>Upload a file</span>
+                    <input 
+                      id="image" 
+                      name="image" 
+                      type="file" 
+                      accept="image/*"
+                      class="sr-only">
+                  </label>
+                  <p class="pl-1">or drag and drop</p>
+                </div>
+                <p class="text-xs text-gray-500">
+                  PNG, JPG, GIF up to 10MB
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content Field -->
+        <div>
+          <label for="content" class="block text-sm font-medium text-gray-700 mb-1">
+            Article Content
+          </label>
+          <textarea 
+            id="content" 
+            name="content" 
+            rows="12"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"></textarea>
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-3">
+          <a 
+            href="/"
+            class="cursor-pointer px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Cancel
+          </a>
+          <button 
+            type="submit"
+            class="cursor-pointer px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Publish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image-preview');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const uploadUI = document.getElementById('upload-ui');
+    const removeImageBtn = document.getElementById('remove-image-btn');
+    const dropZone = document.getElementById('drop-zone');
+
+    // Handle file selection
+    imageInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file && file.type.match('image.*')) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          imagePreviewContainer.classList.remove('hidden');
+          uploadUI.classList.add('hidden');
+          dropZone.classList.remove('border-gray-300', 'hover:border-blue-400', 'hover:bg-blue-50');
+          dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        }
+        
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dropZone.classList.add('border-blue-500', 'bg-blue-100');
+    }
+
+    function unhighlight() {
+      if (!imageInput.files.length) {
+        dropZone.classList.remove('border-blue-500', 'bg-blue-100');
+      }
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      imageInput.files = files;
+      
+      // Trigger change event manually
+      const event = new Event('change');
+      imageInput.dispatchEvent(event);
+    }
+
+    // Handle remove image
+    removeImageBtn.addEventListener('click', function() {
+      imageInput.value = '';
+      imagePreviewContainer.classList.add('hidden');
+      uploadUI.classList.remove('hidden');
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+      dropZone.classList.add('border-gray-300', 'hover:border-blue-400', 'hover:bg-blue-50');
+    });
+  });
+</script>
