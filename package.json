@@ -1,4 +1,7 @@
 {
+    "scripts": {
+        "build": "tsc && tailwindcss --input public/styles.css --output public/compiled.css"
+    },
 	"dependencies": {
 		"@tailwindcss/cli": "^4.0.16",
 		"better-sqlite3": "^11.9.1",

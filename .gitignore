@@ -2,3 +2,5 @@ node_modules
 public/compiled.css
 uploads
 .gitignore
+db.sqlite
+build
